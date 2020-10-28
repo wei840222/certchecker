@@ -35,6 +35,7 @@ func HandleUpdate() {
 			continue
 		}
 		if u.Message.Text != "" {
+			log.Printf("ChatID: %d", u.Message.Chat.ID)
 			if err := handleText(u.Message.Chat.ID, u.Message.MessageID, u.Message.Text); err != nil {
 				log.Printf("test message error: %s", err)
 				msg := tgbotapi.NewMessage(u.Message.Chat.ID, err.Error())
