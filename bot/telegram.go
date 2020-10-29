@@ -19,7 +19,6 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	bot.Debug = true
 	Bot = bot
 }
 
@@ -35,7 +34,6 @@ func HandleUpdate() {
 			continue
 		}
 		if u.Message.Text != "" {
-			log.Printf("ChatID: %d", u.Message.Chat.ID)
 			if err := handleText(u.Message.Chat.ID, u.Message.MessageID, u.Message.Text); err != nil {
 				log.Printf("test message error: %s", err)
 				msg := tgbotapi.NewMessage(u.Message.Chat.ID, err.Error())
@@ -47,6 +45,26 @@ func HandleUpdate() {
 }
 
 func handleText(chatID int64, messageID int, text string) error {
+	if strings.HasPrefix(text, "/start") {
+		msg := tgbotapi.NewMessage(chatID, `command:
+/chatid get chatId
+/add add domain ex: /add name host:port
+/list list domains
+/del delete domain by id ex: /del 1`)
+		msg.ReplyToMessageID = messageID
+		if _, err := Bot.Send(msg); err != nil {
+			return err
+		}
+	}
+
+	if strings.HasPrefix(text, "/chatid") {
+		msg := tgbotapi.NewMessage(chatID, strconv.Itoa(int(chatID)))
+		msg.ReplyToMessageID = messageID
+		if _, err := Bot.Send(msg); err != nil {
+			return err
+		}
+	}
+
 	if strings.HasPrefix(text, "/add") {
 		if len(strings.Split(strings.TrimSpace(strings.TrimPrefix(text, "/add")), " ")) != 2 {
 			return errors.New("invalid args")
