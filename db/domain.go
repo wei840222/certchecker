@@ -1,9 +1,7 @@
 package db
 
-import "gorm.io/gorm"
-
 type Domain struct {
-	gorm.Model
+	ID   uint `gorm:"primarykey"`
 	Name string
 	Host string `gorm:"unique"`
 }
