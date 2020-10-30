@@ -67,7 +67,7 @@ func handleText(chatID int64, messageID int, text string) error {
 
 	if strings.HasPrefix(text, "/add") {
 		if len(strings.Split(strings.TrimSpace(strings.TrimPrefix(text, "/add")), " ")) != 2 {
-			return errors.New("invalid args")
+			return errors.New("usage: /add platform-usage domain_name:port")
 		}
 		name := strings.Split(strings.TrimSpace(strings.TrimPrefix(text, "/add")), " ")[0]
 		domain := strings.Split(strings.TrimSpace(strings.TrimPrefix(text, "/add")), " ")[1]

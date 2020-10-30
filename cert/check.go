@@ -79,6 +79,22 @@ func checkHost(host string) (result hostResult) {
 			cErrs := []error{}
 
 			// Check the expiration.
+			if timeNow.AddDate(0, 0, 1).After(cert.NotAfter) {
+				expiresIn := int64(cert.NotAfter.Sub(timeNow).Hours())
+				if expiresIn <= 48 {
+					cErrs = append(cErrs, fmt.Errorf(errExpiringShortly, host, cert.Subject.CommonName, cert.SerialNumber, expiresIn))
+				} else {
+					cErrs = append(cErrs, fmt.Errorf(errExpiringSoon, host, cert.Subject.CommonName, cert.SerialNumber, expiresIn/24))
+				}
+			}
+			if timeNow.AddDate(0, 0, 7).After(cert.NotAfter) {
+				expiresIn := int64(cert.NotAfter.Sub(timeNow).Hours())
+				if expiresIn <= 48 {
+					cErrs = append(cErrs, fmt.Errorf(errExpiringShortly, host, cert.Subject.CommonName, cert.SerialNumber, expiresIn))
+				} else {
+					cErrs = append(cErrs, fmt.Errorf(errExpiringSoon, host, cert.Subject.CommonName, cert.SerialNumber, expiresIn/24))
+				}
+			}
 			if timeNow.AddDate(0, 0, 20).After(cert.NotAfter) {
 				expiresIn := int64(cert.NotAfter.Sub(timeNow).Hours())
 				if expiresIn <= 48 {
@@ -87,7 +103,6 @@ func checkHost(host string) (result hostResult) {
 					cErrs = append(cErrs, fmt.Errorf(errExpiringSoon, host, cert.Subject.CommonName, cert.SerialNumber, expiresIn/24))
 				}
 			}
-
 			// Check the signature algorithm, ignoring the root certificate.
 			if alg, exists := sunsetSigAlgs[cert.SignatureAlgorithm]; exists && certNum != len(chain)-1 {
 				if cert.NotAfter.Equal(alg.sunsetsAt) || cert.NotAfter.After(alg.sunsetsAt) {
@@ -121,7 +136,7 @@ func StartCertCheck() {
 			}
 
 			if message != "" {
-				msg := tgbotapi.NewMessage(1023864473, fmt.Sprintf("Check cert: %s %s, errors:\n%s", d.Name, d.Host, message))
+				msg := tgbotapi.NewMessage(909503895, fmt.Sprintf("Check cert: %s %s, errors:\n%s", d.Name, d.Host, message))
 				bot.Bot.Send(msg)
 			}
 		}
