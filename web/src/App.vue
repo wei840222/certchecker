@@ -1,25 +1,102 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png" />
-    <div>
-      <p>
-        If Element is successfully added to this project, you'll see an
-        <code v-text="'<el-button>'"></code>
-        below
-      </p>
-      <el-button>el-button</el-button>
-    </div>
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-  </div>
+  <el-container id="app">
+    <el-header style="text-align: start;">
+      <el-button type="primary" @click="dialogFormVisible = true"
+        >新增</el-button
+      >
+      <el-input
+        v-model="filter"
+        placeholder="請输入内容以搜尋"
+        prefix-icon="el-icon-search"
+        style="width: 200px;margin-left: 10px;"
+      ></el-input>
+      <el-dialog title="新增域名" :visible.sync="dialogFormVisible">
+        <el-form :model="form">
+          <el-form-item label="名稱" label-width="100px">
+            <el-input v-model="form.name" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="域名" label-width="100px">
+            <el-input v-model="form.host" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取消</el-button>
+          <el-button type="primary" @click="handleCreate">確定</el-button>
+        </div>
+      </el-dialog>
+    </el-header>
+
+    <el-main>
+      <el-table :data="filteredDomain" stripe style="width: 100%">
+        <el-table-column prop="id" label="ID" width="180"> </el-table-column>
+        <el-table-column prop="name" label="名稱" width="180">
+        </el-table-column>
+        <el-table-column prop="host" label="域名"> </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-popconfirm
+              title="确定删除嗎？"
+              @confirm="handleDelete(scope.row.id)"
+            >
+              <el-button slot="reference" size="mini" type="danger"
+                >刪除</el-button
+              >
+            </el-popconfirm>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-
 export default {
   name: "app",
-  components: {
-    HelloWorld
+  data() {
+    return {
+      dialogFormVisible: false,
+      form: {
+        name: "",
+        host: ""
+      },
+      filter: "",
+      domain: []
+    };
+  },
+  computed: {
+    filteredDomain() {
+      return this.filter === ""
+        ? this.domain
+        : this.domain.filter(
+            d => d.name.includes(this.filter) || d.host.includes(this.filter)
+          );
+    }
+  },
+  mounted() {
+    this.fetchData();
+    setInterval(() => this.fetchData(), 3000);
+  },
+  methods: {
+    async fetchData() {
+      const res = await this.$axios.get("/domain");
+      this.domain = res.data;
+    },
+    async handleCreate() {
+      this.dialogFormVisible = false;
+      await this.$axios.post("/domain", {
+        name: this.form.name,
+        host: this.form.host
+      });
+      this.form = {
+        name: "",
+        host: ""
+      };
+      this.fetchData();
+    },
+    async handleDelete(id) {
+      await this.$axios.delete(`/domain/${id}`);
+      this.fetchData();
+    }
   }
 };
 </script>
