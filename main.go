@@ -17,6 +17,7 @@ func main() {
 	{
 		d.GET("", handler.ListDomain)
 		d.POST("", handler.CreateDomain)
+		d.DELETE(":id", handler.DeleteDomain)
 	}
 	r.Run()
 }
