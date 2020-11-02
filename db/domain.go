@@ -1,9 +1,9 @@
 package db
 
 type Domain struct {
-	ID   uint `gorm:"primarykey"`
-	Name string
-	Host string `gorm:"unique"`
+	ID   uint   `gorm:"primarykey" json:"id"`
+	Name string `json:"name" binding:"required"`
+	Host string `gorm:"unique" json:"host" binding:"required"`
 }
 
 func CreateDomain(d *Domain) error {
