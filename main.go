@@ -5,6 +5,7 @@ import (
 	"github.com/wei840222/certchecker/cert"
 	"github.com/wei840222/certchecker/handler"
 
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,6 +14,7 @@ func main() {
 	go bot.HandleUpdate()
 
 	r := gin.Default()
+	r.Use(static.Serve("/", static.LocalFile("./web/dist", false)))
 	d := r.Group("/domain")
 	{
 		d.GET("", handler.ListDomain)
