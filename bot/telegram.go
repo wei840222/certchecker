@@ -1,9 +1,11 @@
 package bot
 
 import (
+	"crypto/tls"
 	"errors"
 	"fmt"
 	"log"
+	"net/http"
 	"strconv"
 	"strings"
 
@@ -15,7 +17,16 @@ import (
 var Bot *tgbotapi.BotAPI
 
 func init() {
-	bot, err := tgbotapi.NewBotAPI("628484017:AAHw9EcMePoxGLBR-4fd8BnXYHKRVdSwUuo")
+	bot, err := tgbotapi.NewBotAPIWithClient(
+		"628484017:AAHw9EcMePoxGLBR-4fd8BnXYHKRVdSwUuo",
+		&http.Client{
+			Transport: &http.Transport{
+				TLSClientConfig: &tls.Config{
+					InsecureSkipVerify: true,
+				},
+			},
+		},
+	)
 	if err != nil {
 		panic(err)
 	}
