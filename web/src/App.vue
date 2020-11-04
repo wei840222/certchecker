@@ -1,6 +1,6 @@
 <template>
   <el-container id="app">
-    <el-header style="text-align: start;">
+    <el-header style="text-align: start;height: unset;">
       <el-button type="primary" @click="dialogFormVisible = true"
         >新增</el-button
       >
@@ -127,6 +127,15 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 20px;
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+  background: #fff
+    url(https://c.files.bbci.co.uk/6577/production/_110957952_42f5b28f-0145-42c8-b5b9-7333611a3a02.jpg)
+    center center fixed no-repeat;
+  background-size: cover;
 }
 </style>
