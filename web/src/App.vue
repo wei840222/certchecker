@@ -28,11 +28,26 @@
 
     <el-main>
       <el-table :data="filteredDomain" stripe style="width: 100%">
-        <el-table-column prop="id" label="ID" width="180"> </el-table-column>
-        <el-table-column prop="name" label="名稱" width="180">
+        <el-table-column prop="id" label="ID" width="80" />
+        <el-table-column prop="host" label="域名" />
+        <el-table-column prop="name" label="名稱" width="300" />
+        <el-table-column label="開始">
+          <template slot-scope="scope">
+            <i v-if="scope.row.since" class="el-icon-time"></i>
+            <span v-if="scope.row.since" style="margin-left: 5px">{{
+              rfc3339ToLocaleString(scope.row.since)
+            }}</span>
+          </template>
         </el-table-column>
-        <el-table-column prop="host" label="域名"> </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="結束">
+          <template slot-scope="scope">
+            <i v-if="scope.row.end" class="el-icon-time"></i>
+            <span v-if="scope.row.end" style="margin-left: 5px">{{
+              rfc3339ToLocaleString(scope.row.end)
+            }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-popconfirm
               title="确定删除嗎？"
@@ -77,6 +92,10 @@ export default {
     setInterval(() => this.fetchData(), 3000);
   },
   methods: {
+    rfc3339ToLocaleString: timeStr =>
+      new Date(Date.parse(timeStr)).toLocaleString("zh-TW", {
+        timeZone: "Asia/Taipei"
+      }),
     async fetchData() {
       const res = await this.$axios.get("/domain");
       this.domain = res.data;
