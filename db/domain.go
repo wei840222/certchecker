@@ -1,5 +1,6 @@
 package db
 
+//增刪domain
 type Domain struct {
 	ID   uint   `gorm:"primarykey" json:"id"`
 	Name string `json:"name" binding:"required"`

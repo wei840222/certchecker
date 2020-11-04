@@ -1,5 +1,6 @@
 package bot
 
+// 機器人控制
 import (
 	"crypto/tls"
 	"errors"
@@ -18,7 +19,7 @@ var Bot *tgbotapi.BotAPI
 
 func init() {
 	bot, err := tgbotapi.NewBotAPIWithClient(
-		"628484017:AAHw9EcMePoxGLBR-4fd8BnXYHKRVdSwUuo",
+		"1244647772:AAHUTLOBfmemLGzoJi4k3IBMOy_IT5jhSQI",
 		&http.Client{
 			Transport: &http.Transport{
 				TLSClientConfig: &tls.Config{

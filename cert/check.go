@@ -1,5 +1,6 @@
 package cert
 
+//憑證相關
 import (
 	"crypto/tls"
 	"crypto/x509"

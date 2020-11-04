@@ -1,5 +1,6 @@
 package handler
 
+//api
 import (
 	"github.com/wei840222/certchecker/db"
 

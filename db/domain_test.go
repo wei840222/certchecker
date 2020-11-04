@@ -1,5 +1,6 @@
 package db_test
 
+//測試用
 import (
 	"github.com/wei840222/certchecker/db"
 
