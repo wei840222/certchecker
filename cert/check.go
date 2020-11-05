@@ -2,14 +2,16 @@ package cert
 
 //憑證相關
 import (
+	"github.com/wei840222/certchecker/bot"
+	_ "github.com/wei840222/certchecker/conf"
+	"github.com/wei840222/certchecker/db"
+
 	"crypto/tls"
 	"fmt"
 	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/spf13/viper"
-	"github.com/wei840222/certchecker/bot"
-	"github.com/wei840222/certchecker/db"
 )
 
 func checkHost(d *db.Domain) error {
@@ -42,13 +44,6 @@ func checkHost(d *db.Domain) error {
 }
 
 func StartCertCheck() {
-	viper.SetConfigName("config") // name of config file (without extension)
-	viper.SetConfigType("yaml")   // REQUIRED if the config file does not have the extension in the name
-	viper.AddConfigPath("./conf") // optionally look for config in the working directory
-	err := viper.ReadInConfig()   // Find and read the config file
-	if err != nil {               // Handle errors reading the config file
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
-	}
 	for range time.NewTicker(15 * time.Minute).C {
 		domains, _ := db.ListDomain()
 		for _, d := range domains {

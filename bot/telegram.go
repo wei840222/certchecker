@@ -2,6 +2,9 @@ package bot
 
 // 機器人控制
 import (
+	_ "github.com/wei840222/certchecker/conf"
+	"github.com/wei840222/certchecker/db"
+
 	"crypto/tls"
 	"errors"
 	"fmt"
@@ -10,23 +13,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/spf13/viper"
-	"github.com/wei840222/certchecker/db"
-
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	"github.com/spf13/viper"
 )
 
 var Bot *tgbotapi.BotAPI
 
 func init() {
-	viper.SetConfigName("config") // name of config file (without extension)
-	viper.SetConfigType("yaml")   // REQUIRED if the config file does not have the extension in the name
-	viper.AddConfigPath("./conf") // optionally look for config in the working directory
-	err := viper.ReadInConfig()   // Find and read the config file
-	if err != nil {               // Handle errors reading the config file
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
-	}
-
 	bot, err := tgbotapi.NewBotAPIWithClient(
 		viper.GetString("certbotkey"),
 		&http.Client{
