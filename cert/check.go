@@ -7,6 +7,7 @@ import (
 	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	"github.com/spf13/viper"
 	"github.com/wei840222/certchecker/bot"
 	"github.com/wei840222/certchecker/db"
 )
@@ -28,7 +29,7 @@ func checkHost(d *db.Domain) error {
 				})
 			}
 			// Check the expiration.
-			if now.AddDate(0, 3, 0).After(cert.NotAfter) {
+			if now.AddDate(0, 0, 14).After(cert.NotAfter) {
 				expiresIn := int64(cert.NotAfter.Sub(now).Hours())
 				if expiresIn <= 48 {
 					return fmt.Errorf("%s: %s \nhttps://%s expires in %d hours", d.Name, d.Host, d.Host, expiresIn)
@@ -41,11 +42,18 @@ func checkHost(d *db.Domain) error {
 }
 
 func StartCertCheck() {
+	viper.SetConfigName("config") // name of config file (without extension)
+	viper.SetConfigType("yaml")   // REQUIRED if the config file does not have the extension in the name
+	viper.AddConfigPath("./conf") // optionally look for config in the working directory
+	err := viper.ReadInConfig()   // Find and read the config file
+	if err != nil {               // Handle errors reading the config file
+		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+	}
 	for range time.NewTicker(5 * time.Minute).C {
 		domains, _ := db.ListDomain()
 		for _, d := range domains {
 			if err := checkHost(d); err != nil {
-				msg := tgbotapi.NewMessage(909503895, err.Error())
+				msg := tgbotapi.NewMessage(viper.GetInt64("chatid"), err.Error())
 				bot.Bot.Send(msg)
 			}
 		}
