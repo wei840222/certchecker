@@ -11,8 +11,8 @@ import (
 
 func main() {
 
-	go cert.StartCertDateCheck()
 	go cert.StartCertCheck()
+	go bot.StartAlert()
 	go bot.HandleUpdate()
 
 	r := gin.Default()

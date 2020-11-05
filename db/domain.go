@@ -9,6 +9,7 @@ type Domain struct {
 	Host  string     `gorm:"unique" json:"host" binding:"required"`
 	Since *time.Time `json:"since,omitempty"`
 	End   *time.Time `json:"end,omitempty"`
+	Error string     `json:"error,omitempty"`
 }
 
 func CreateDomain(d *Domain) error {
@@ -21,6 +22,10 @@ func UpdateDomain(id uint, d *Domain) error {
 
 func DeleteDomain(id uint) error {
 	return DB.Delete(Domain{}, id).Error
+}
+
+func DeleteDomainError(id uint) error {
+	return DB.Model(Domain{}).Where("id = ?", id).Update("error", "").Error
 }
 
 func ListDomain() ([]*Domain, error) {

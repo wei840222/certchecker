@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/spf13/viper"
@@ -128,4 +129,16 @@ func handleText(chatID int64, messageID int, text string) error {
 	}
 
 	return nil
+}
+
+func StartAlert() {
+	for range time.NewTicker(15 * time.Minute).C {
+		domains, _ := db.ListDomain()
+		for _, d := range domains {
+			if d.Error != "" {
+				msg := tgbotapi.NewMessage(viper.GetInt64("chatid"), d.Error)
+				Bot.Send(msg)
+			}
+		}
+	}
 }
