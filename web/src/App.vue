@@ -31,7 +31,18 @@
         <el-table-column prop="id" label="ID" sortable width="80" />
         <el-table-column prop="host" sortable label="域名" />
         <el-table-column prop="name" sortable label="名稱" width="300" />
-        <el-table-column label="開始" sortable>
+        <el-table-column
+          label="開始"
+          sortable
+          :sort-method="
+            (a, b) =>
+              Date.parse(a.since) > Date.parse(b.since)
+                ? 1
+                : Date.parse(a.since) < Date.parse(b.since)
+                ? -1
+                : 0
+          "
+        >
           <template slot-scope="scope">
             <i v-if="scope.row.since" class="el-icon-time"></i>
             <span v-if="scope.row.since" style="margin-left: 5px">{{
@@ -39,7 +50,18 @@
             }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="結束" sortable>
+        <el-table-column
+          label="結束"
+          sortable
+          :sort-method="
+            (a, b) =>
+              Date.parse(a.end) > Date.parse(b.end)
+                ? 1
+                : Date.parse(a.end) < Date.parse(b.end)
+                ? -1
+                : 0
+          "
+        >
           <template slot-scope="scope">
             <i v-if="scope.row.end" class="el-icon-time"></i>
             <span v-if="scope.row.end" style="margin-left: 5px">{{
