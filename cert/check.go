@@ -15,7 +15,7 @@ import (
 func checkHost(d *db.Domain) error {
 	conn, err := tls.Dial("tcp", d.Host, nil)
 	if err != nil {
-		return fmt.Errorf("%s: %s https://%s", d.Name, d.Host, err)
+		return fmt.Errorf("%s: %s %s", d.Name, d.Host, err)
 	}
 	defer conn.Close()
 
@@ -49,7 +49,7 @@ func StartCertCheck() {
 	if err != nil {               // Handle errors reading the config file
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
-	for range time.NewTicker(5 * time.Minute).C {
+	for range time.NewTicker(15 * time.Minute).C {
 		domains, _ := db.ListDomain()
 		for _, d := range domains {
 			if err := checkHost(d); err != nil {
@@ -64,7 +64,8 @@ func StartCertDateCheck() {
 		domains, _ := db.ListDomain()
 		for _, m := range domains {
 			if err := checkHost(m); err != nil {
-				return
+				msg := tgbotapi.NewMessage(0000000, err.Error())
+				bot.Bot.Send(msg)
 			}
 		}
 	}
