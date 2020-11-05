@@ -28,10 +28,10 @@
 
     <el-main>
       <el-table :data="filteredDomain" stripe style="width: 100%">
-        <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="host" label="域名" />
-        <el-table-column prop="name" label="名稱" width="300" />
-        <el-table-column label="開始">
+        <el-table-column prop="id" label="ID" sortable width="80" />
+        <el-table-column prop="host" sortable label="域名" />
+        <el-table-column prop="name" sortable label="名稱" width="300" />
+        <el-table-column label="開始" sortable>
           <template slot-scope="scope">
             <i v-if="scope.row.since" class="el-icon-time"></i>
             <span v-if="scope.row.since" style="margin-left: 5px">{{
@@ -39,7 +39,7 @@
             }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="結束">
+        <el-table-column label="結束" sortable>
           <template slot-scope="scope">
             <i v-if="scope.row.end" class="el-icon-time"></i>
             <span v-if="scope.row.end" style="margin-left: 5px">{{
@@ -83,7 +83,11 @@ export default {
       return this.filter === ""
         ? this.domain
         : this.domain.filter(
-            d => d.name.includes(this.filter) || d.host.includes(this.filter)
+            d =>
+              d.name.includes(this.filter) ||
+              d.host.includes(this.filter) ||
+              d.since.includes(this.filter) ||
+              d.end.includes(this.filter)
           );
     }
   },
