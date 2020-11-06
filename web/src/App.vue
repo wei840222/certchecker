@@ -28,11 +28,18 @@
 
     <el-main>
       <el-table :data="filteredDomain" stripe style="width: 100%">
-        <el-table-column prop="id" label="ID" sortable width="80" />
-        <el-table-column prop="host" sortable label="域名" />
+        <el-table-column
+          prop=""
+          type="index"
+          :index="indexMethod"
+          sortable
+          width="50"
+        />
+        <el-table-column prop="host" sortable label="域名" width="250" />
         <el-table-column prop="name" sortable label="名稱" width="300" />
         <el-table-column
           label="開始"
+          width="300"
           sortable
           :sort-method="
             (a, b) =>
@@ -53,6 +60,7 @@
         <el-table-column
           label="結束"
           sortable
+          width="300"
           :sort-method="
             (a, b) =>
               Date.parse(a.end) > Date.parse(b.end)
@@ -82,6 +90,7 @@
             </el-popconfirm>
           </template>
         </el-table-column>
+        <el-table-column prop="id" label="ID" width="50" />
       </el-table>
     </el-main>
   </el-container>
@@ -119,6 +128,10 @@ export default {
     setInterval(() => this.fetchData(), 3000);
   },
   methods: {
+    indexMethod(index) {
+      index++;
+      return index;
+    },
     rfc3339ToLocaleString: timeStr =>
       new Date(Date.parse(timeStr)).toLocaleString("zh-TW", {
         timeZone: "Asia/Taipei"
