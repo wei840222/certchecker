@@ -132,7 +132,7 @@ func handleText(chatID int64, messageID int, text string) error {
 }
 
 func StartAlert() {
-	for range time.NewTicker(15 * time.Minute).C {
+	for range time.NewTicker(30 * time.Minute).C {
 		domains, _ := db.ListDomain()
 		for _, d := range domains {
 			if d.Error != "" {
