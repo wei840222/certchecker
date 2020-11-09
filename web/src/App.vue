@@ -90,6 +90,17 @@
             </el-popconfirm>
           </template>
         </el-table-column>
+        <el-table-column label="Ignore alert" width="150">
+          <template slot-scope="scope">
+            <el-switch
+              @change="handleSwitch(scope.row)"
+              v-model="scope.row.isDisableSentNotify"
+              active-text="True"
+              inactive-text="False"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
         <el-table-column prop="id" label="ID" width="50" />
       </el-table>
     </el-main>
@@ -132,6 +143,12 @@ export default {
       index++;
       return index;
     },
+    async handleSwitch(e) {
+      await this.$axios.patch(`/domain/${e.id}`, {
+        isDisableSentNotify: e.isDisableSentNotify
+      });
+    },
+
     rfc3339ToLocaleString: timeStr =>
       new Date(Date.parse(timeStr)).toLocaleString("zh-TW", {
         timeZone: "Asia/Taipei"

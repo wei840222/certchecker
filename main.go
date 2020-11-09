@@ -22,6 +22,7 @@ func main() {
 		d.GET("", handler.ListDomain)
 		d.POST("", handler.CreateDomain)
 		d.DELETE(":id", handler.DeleteDomain)
+		d.PATCH(":id", handler.UpdateDomain)
 	}
 	r.Run()
 }

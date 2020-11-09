@@ -135,7 +135,7 @@ func StartAlert() {
 	for range time.NewTicker(30 * time.Minute).C {
 		domains, _ := db.ListDomain()
 		for _, d := range domains {
-			if d.Error != "" {
+			if d.Error != "" && (d.IsDisableSentNotify == nil || *d.IsDisableSentNotify == false) {
 				msg := tgbotapi.NewMessage(viper.GetInt64("chatid"), d.Error)
 				Bot.Send(msg)
 			}

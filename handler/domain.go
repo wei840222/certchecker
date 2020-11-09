@@ -54,3 +54,25 @@ func DeleteDomain(c *gin.Context) {
 
 	c.Status(http.StatusNoContent)
 }
+
+func UpdateDomain(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.Error(err)
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if id <= 0 {
+		err := errors.New("id should be natual number")
+		c.Error(err)
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	var d db.Domain
+	c.ShouldBindJSON(&d)
+	if err := db.UpdateDomain(uint(id), &d); err != nil {
+		panic(err)
+	}
+
+	c.Status(http.StatusNoContent)
+}

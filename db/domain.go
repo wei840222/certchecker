@@ -4,12 +4,13 @@ import "time"
 
 //增刪domain
 type Domain struct {
-	ID    uint       `gorm:"primarykey" json:"id"`
-	Name  string     `json:"name" binding:"required"`
-	Host  string     `gorm:"unique" json:"host" binding:"required"`
-	Since *time.Time `json:"since,omitempty"`
-	End   *time.Time `json:"end,omitempty"`
-	Error string     `json:"error,omitempty"`
+	ID                  uint       `gorm:"primarykey" json:"id"`
+	Name                string     `json:"name" binding:"required"`
+	Host                string     `gorm:"unique" json:"host" binding:"required"`
+	Since               *time.Time `json:"since,omitempty"`
+	End                 *time.Time `json:"end,omitempty"`
+	Error               string     `json:"error,omitempty"`
+	IsDisableSentNotify *bool      `json:"isDisableSentNotify"`
 }
 
 func CreateDomain(d *Domain) error {
