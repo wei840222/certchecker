@@ -129,8 +129,8 @@ export default {
             d =>
               d.name.includes(this.filter) ||
               d.host.includes(this.filter) ||
-              d.since.includes(this.filter) ||
-              d.end.includes(this.filter)
+              (d.since && d.since.includes(this.filter)) ||
+              (d.end && d.end.includes(this.filter))
           );
     }
   },
