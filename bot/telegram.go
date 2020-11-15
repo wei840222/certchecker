@@ -135,10 +135,12 @@ func StartAlert() {
 	for range time.NewTicker(30 * time.Minute).C {
 		domains, _ := db.ListDomain()
 		for _, d := range domains {
-			if d.Error != "" && (d.IsDisableSentNotify == nil || *d.IsDisableSentNotify == false) {
-				msg := tgbotapi.NewMessage(viper.GetInt64("chatid"), d.Error)
-				Bot.Send(msg)
-			}
+			go func(dd *db.Domain) {
+				if dd.Error != "" && (dd.IsDisableSentNotify == nil || *dd.IsDisableSentNotify == false) {
+					msg := tgbotapi.NewMessage(viper.GetInt64("chatid"), dd.Error)
+					Bot.Send(msg)
+				}
+			}(d)
 		}
 	}
 }

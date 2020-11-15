@@ -54,10 +54,10 @@ func checkHost(d *db.Domain) {
 }
 
 func StartCertCheck() {
-	for range time.NewTicker(5 * time.Minute).C {
+	for range time.NewTicker(5 * time.Second).C {
 		domains, _ := db.ListDomain()
 		for _, d := range domains {
-			checkHost(d)
+			go checkHost(d)
 		}
 	}
 }
