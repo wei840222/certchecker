@@ -13,10 +13,18 @@
       <el-dialog title="新增域名" :visible.sync="dialogFormVisible">
         <el-form :model="form">
           <el-form-item label="名稱" label-width="100px">
-            <el-input v-model="form.name" autocomplete="off"></el-input>
+            <el-input
+              v-model="form.name"
+              autocomplete="off"
+              placeholder="產品名 功能 EX:NN api"
+            ></el-input>
           </el-form-item>
           <el-form-item label="域名" label-width="100px">
-            <el-input v-model="form.host" autocomplete="off"></el-input>
+            <el-input
+              v-model="form.host"
+              autocomplete="off"
+              placeholder="https://abc.com:443"
+            ></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
