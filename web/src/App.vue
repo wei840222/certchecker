@@ -23,7 +23,7 @@
             <el-input
               v-model="form.host"
               autocomplete="off"
-              placeholder="https://abc.com:443"
+              placeholder="abc.com:443"
             ></el-input>
           </el-form-item>
         </el-form>
